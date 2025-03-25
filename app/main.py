@@ -108,8 +108,8 @@ class SlManager(QWidget):
                 shutil.copytree(folder_path, destination)
                 QMessageBox.information(self, "Success", f"The folder '{folder_name}' has been successfully moved!")
 
-            except Exception as e:
-                QMessageBox.critical(self, "Error", f"An error occurred: {str(e)}")
+            except Exception as ex:
+                QMessageBox.critical(self, "Error", f"An error occurred: {str(ex)}")
 
     def select_mp3(self):
         # Selects an .mp3 file and copies it to the music folder
@@ -152,8 +152,8 @@ class SlManager(QWidget):
             self.keybind_input.clear()
             self.command_input.clear()
 
-        except Exception as e:
-            QMessageBox.critical(self, "Error", f"An error occurred: {str(e)}")
+        except Exception as ex:
+            QMessageBox.critical(self, "Error", f"An error occurred: {str(ex)}")
 
     def clear_cmdbind(self):
         # Clear the cmdbinding.txt file with a warning
@@ -165,12 +165,12 @@ class SlManager(QWidget):
                 # Clear the cmdbinding.txt file
                 open(CMDBINDING_PATH, 'w').close()
                 QMessageBox.information(self, "Success", "All keybinds have been cleared successfully!")
-            except Exception as e:
-                QMessageBox.critical(self, "Error", f"An error occurred: {str(e)}")
+            except Exception as ex:
+                QMessageBox.critical(self, "Error", f"An error occurred: {str(ex)}")
 
     def open_link(self):
         # Opens the URL when the info button is clicked
-        url = "https://www.example.com"
+        url = "https://github.com/RLLanonymous/SLManager/blob/dev/docs/Keybinds.md"
         webbrowser.open(url)
 
 if __name__ == "__main__":
