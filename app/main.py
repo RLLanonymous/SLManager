@@ -3,8 +3,8 @@ import shutil
 import os
 import webbrowser
 from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QFileDialog, QMessageBox, QFormLayout, QLineEdit, QHBoxLayout, QSystemTrayIcon, QMenu, QComboBox, QLabel
-from PyQt6.QtGui import QAction, QIcon
-from PyQt6.QtCore import Qt, QTranslator, QCoreApplication, QLocale
+from PyQt6.QtGui import QAction, QIcon, QPixmap
+from PyQt6.QtCore import Qt, QTranslator, QCoreApplication, QLocale, QSize
 from qt_material import apply_stylesheet
 
 # Info: Here should be placed every path to the files/folders you want to manage
@@ -16,15 +16,13 @@ class SlManager(QWidget):
     def __init__(self):
         super().__init__()
 
-        # Set application language (translation system)
-        self.set_language()
-
         # Info: Here should be placed the settings of the app
         self.setWindowTitle(self.tr("SLManager"))
         self.setFixedSize(800, 300)
         self.setGeometry(100, 100, 400, 300)
         self.setWindowIcon(QIcon('icon.ico'))
         apply_stylesheet(app, theme='dark_blue.xml')
+        self.set_language()
 
         layout = QVBoxLayout()
 
@@ -83,7 +81,7 @@ class SlManager(QWidget):
 
         self.setLayout(layout)
 
-        # Icon
+        # Tray icon
         self.tray_icon = QSystemTrayIcon(QIcon('icon.ico'), parent=self)
         self.tray_icon.setToolTip(self.tr("SLManager - Right click for options"))
 
@@ -95,12 +93,22 @@ class SlManager(QWidget):
         self.tray_icon.setContextMenu(tray_menu)
         self.tray_icon.show()
 
+        # Add the top-right GitHub icon button
+        top_layout = QHBoxLayout() 
+        self.github_button = QPushButton(self)
+        self.github_button.setIcon(QIcon("icon.ico")) 
+        self.github_button.setIconSize(QSize(32, 32))  
+        self.github_button.clicked.connect(self.open_github)
+
+        top_layout.addStretch()
+        top_layout.addWidget(self.github_button)
+
+        layout.addLayout(top_layout)
+
     def set_language(self):
         # Load translation file based on system language
         translator = QTranslator()
         locale = QLocale.system().name()  # Auto-detect system language (fr_FR, en_US, etc.)
-        
-        print(f"Trying to load translation file: translations/{locale}.qm")  # Debugging output
         
         if translator.load(f"{locale}.qm"):
             QCoreApplication.installTranslator(translator)
@@ -119,9 +127,6 @@ class SlManager(QWidget):
 
     def load_translation(self, lang_file):
         translator = QTranslator()  # Create the translator instance
-
-        # Debugging translation file path
-        print(f"Trying to load translation file: {lang_file}")
 
         # Load the translation file
         if translator.load(lang_file):
@@ -228,7 +233,11 @@ class SlManager(QWidget):
                 QMessageBox.critical(self, self.tr("Error"), self.tr(f"An error occurred: {str(ex)}"))
 
     def open_link(self):
-        url = "https://github.com/RLLanonymous/SLManager/blob/dev/docs/Keybinds.md"
+        url = "https://github.com/RLLanonymous/SLManager/blob/main/docs/Keybinds.md"
+        webbrowser.open(url)
+
+    def open_github(self):
+        url = "https://github.com/RLLanonymous/SLManager"
         webbrowser.open(url)
 
 if __name__ == "__main__":
