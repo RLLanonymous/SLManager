@@ -116,10 +116,10 @@ class SlManager(QWidget):
             QMessageBox.critical(self, self.tr("Error"), self.tr(f"Failed to load the translation file for locale {locale}"))
 
     def change_language(self, language):
-        if language == "Français":
-            self.load_translation("fr_FR.qm")
-        elif language == "English":
+        if language == "English":
             self.load_translation("en_US.qm")
+        elif language == "Français":
+            self.load_translation("fr_FR.qm")
         elif language == "Deutsch":
             self.load_translation("de_DE.qm")
         else:
